@@ -1,0 +1,38 @@
+@font-face{
+    font-family: "RobotoLight";
+    src: url("fonts\\Roboto-Light.ttf");
+}
+*{
+    box-sizing: border-box;
+    font-family: RobotoLight;
+}
+h1{
+    padding: 36px 0px 35px 0px;
+    margin: 0;
+    font-size: 20px;
+}
+div[ng-app="editEmailsApp"]{
+    display: block;
+    width: 100%;
+    /*border:1px solid;*/
+    background: #f5f5f5;
+}
+#top{    
+    padding: 0 40px;
+}
+#buttons {
+    background: white;
+    padding: 30px 40px 40px 40px;
+    font-size: 0;
+}
+button{
+    background: #6699ff;
+    border-radius: 1px;
+    color: white;
+    border:none;
+    margin-right: 20px;
+    height: 30px;
+}
+emails-editor{
+    margin-bottom: 30px;
+}

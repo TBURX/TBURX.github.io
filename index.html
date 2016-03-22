@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        
+    <link rel="stylesheet" type="text/css" href="emailsEditor.css">
+    <script src="emailsEditor.js"></script>	
+</head>
+<body>
+
+    <div ng-app="editEmailsApp">
+        <div id="top">
+            <h1>Share "Board name" with others</h1>
+            <emails-editor add-email="addEmail" get-emails-count="getEmailsCount"/>
+        </div>
+        <div id="buttons">
+            <button ng-click="addEmail()" style="width: 100px">Add email</button>
+            <button ng-click="getEmailsCount()" style="width: 120px">Get emails count</button>
+        </div>
+        </div>
+    </div>
+
+</body>
+</html>

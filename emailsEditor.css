@@ -1,0 +1,50 @@
+emails-editor{
+    display: block;    
+}
+emails-editor div {
+    border-top: 1px solid #cccccc;
+    padding-top: 7px;
+    padding-left: 8px;
+    height: 100px;
+    overflow-y: auto;
+    width: 100%;
+    margin: auto;
+    background: white;
+}
+emails-editor .email-input{    
+    border: none;
+    display: inline-block;
+    float:left;
+    padding: 0px 1px;
+    background: transparent;
+    line-height: 23px;
+}
+emails-editor .email-input:focus{    
+    outline: none;
+}
+emails-editor .email{
+    display:inline-block;
+    color: #333333;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 0px 8px;
+    margin-top: 0;
+    margin-bottom: 3px;
+    margin-right: 10px;
+    height: 24px;
+    float:left;
+    text-align: center;
+    line-height:  24px;
+}
+emails-editor .email.correct{    
+    background: #d9e8ff;
+    border-radius: 12px;
+}
+emails-editor .email.wrong{
+    border-bottom: 2px dashed red;
+}
+emails-editor .email .remove{
+    margin-left: 5px;
+    font-size: 12px;
+    cursor: pointer;
+}
