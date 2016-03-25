@@ -34,6 +34,7 @@ emails-editor .email{
     float:left;
     text-align: center;
     line-height:  24px;
+    white-space: nowrap;
 }
 emails-editor .email.correct{    
     background: #d9e8ff;
