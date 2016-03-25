@@ -1,10 +1,10 @@
 @font-face{
-    font-family: "RobotoLight";
-    src: url("fonts\\Roboto-Light.ttf");
+    font-family: "MyriadPro";
+    src: url("fonts\\MyriadPro\\MyriadPro-Bold.otf");
 }
 *{
     box-sizing: border-box;
-    font-family: RobotoLight;
+    font-family: MyriadPro;
 }
 body{
     background: black;
