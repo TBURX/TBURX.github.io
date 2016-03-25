@@ -9,14 +9,14 @@
     </head>
     <body>
 
-        <div ng-app="editEmailsApp">
+        <div ng-app="editEmailsApp" ng-controller="editEmailsController">
             <div id="top">
                 <h1>Share <span class="naming">Board name</span> with others</h1>
                 <emails-editor add-email="addEmail" get-emails-count="getEmailsCount"/>
             </div>
             <div id="buttons">
                 <button ng-click="addEmail()" style="width: 100px; padding-left: 3px;">Add email</button>
-                <button ng-click="getEmailsCount()" style="width: 120px; padding-left: 6px">Get emails count</button>
+                <button ng-click="getEmailsCount()" style="width: 120px; padding-left: 6px">Get emails count {{emailsString}}</button>
             </div>
             </div>
         </div>
