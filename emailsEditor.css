@@ -3,8 +3,6 @@ emails-editor{
 }
 emails-editor div {
     border-top: 1px solid #cccccc;
-    padding-top: 7px;
-    padding-left: 8px;
     height: 100px;
     overflow-y: auto;
     width: 100%;
@@ -15,9 +13,10 @@ emails-editor .email-input{
     border: none;
     display: inline-block;
     float:left;
-    padding: 0px 1px;
     background: transparent;
-    line-height: 23px;
+    font-weight: lighter;
+    line-height: 22px;
+    font-size: 14px;
 }
 emails-editor .email-input:focus{    
     outline: none;
@@ -25,9 +24,8 @@ emails-editor .email-input:focus{
 emails-editor .email{
     display:inline-block;
     color: #333333;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 0px 8px;
+    font-size: 14px;
+    padding: 0px 9px;
     margin-top: 0;
     margin-bottom: 3px;
     margin-right: 10px;
@@ -44,7 +42,8 @@ emails-editor .email.wrong{
     border-bottom: 2px dashed red;
 }
 emails-editor .email .remove{
-    margin-left: 5px;
-    font-size: 12px;
+    margin-left: 4px;
+    font-size: 11px;
+    font-weight: bold;
     cursor: pointer;
 }
