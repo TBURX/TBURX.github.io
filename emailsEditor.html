@@ -1,6 +1,6 @@
-<div ng-click="focus();" ng-focus="focus();">    
-    <span class="email {{email.correct}}" ng-repeat="email in eMails">
-        {{email.name}}        
+<div ng-click="focus();">    
+    <span class="email {{isEmail(email) ? 'correct' : 'wrong'}}" ng-repeat="email in eMails">
+        {{email}}        
         <span class="remove" ng-click="remove($index)">&#10006;</span>    
     </span>    
     <input type="text" class="email-input" ng-model="emailsString" ng-change="change()" ng-keyup="keyUp($event)" ng-blur="blur()" ng-paste="paste()" placeholder="add more people ...">

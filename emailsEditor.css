@@ -1,14 +1,14 @@
 emails-editor{
     display: block;    
 }
-emails-editor div {
+emails-editor div{
     border-top: 1px solid #cccccc;
     padding: 7px 9px;
     height: 100px;
-    overflow-y: auto;
     width: 100%;
-    margin: auto;
     background: white;
+    overflow-y: auto;
+    position: relative;
 }
 emails-editor .email-input{    
     border: none;

@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 <html>
     <head>
+        
         <link rel="stylesheet" type="text/css" href="style.css">
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-
         <link rel="stylesheet" type="text/css" href="emailsEditor.css">
-        <script src="emailsEditor.js"></script>        
+        
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        
+        <script src="emailsEditorApp.js"></script> 
+        <script src="myApp.js"></script>
+        <script src="myController.js"></script>
+        
     </head>
     <body>
 
-        <div ng-app="editEmailsApp" ng-controller="editEmailsController">
-            <div class="top">
-                <h1>Share <span class="naming">Board name</span> with others</h1>
-                <emails-editor ng-model="addresses"></emails-editor>
+        <div ng-app="myApp" ng-controller="controller">
+            <div ng-app="emailsEditorApp">
+                
+                <div class="top">
+                    <h1>Share <span class="naming">Board name</span> with others</h1>
+                    <emails-editor ng-model="addresses"></emails-editor>
+                </div>
+                
+                <div class="buttons">
+                    <button ng-click="addEmail(addresses)" style="width: 100px; padding-left: 3px;">Add email</button>
+                    <button ng-click="getEmailsCount(addresses)" style="width: 120px; padding-left: 6px">Get emails count</button>
+                </div>
+                
             </div>
-            <div class="buttons">
-                <button ng-click="addEmail()" style="width: 100px; padding-left: 3px;">Add email</button>
-                <button ng-click="getEmailsCount()" style="width: 120px; padding-left: 6px">Get emails count</button>
-            </div>
-            </div>
-        </div>   
+        </div>
+        
     </body>
 </html>

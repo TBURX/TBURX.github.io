@@ -33,7 +33,7 @@ span.naming::after{
     margin-right: 1px;
 }
 
-div[ng-app="editEmailsApp"]{
+div[ng-app="myApp"]{
     display: block;
     max-width: 500px;
     margin: auto;
@@ -65,4 +65,6 @@ button{
 
 emails-editor{
     margin-bottom: 30px;
+    padding-left: 1px;
+    padding-right: 1px;
 }
