@@ -19,14 +19,14 @@ h1{
     font-weight: normal;
 }
 
-span.naming::before{
+q::before{
     content: '\201c';
     font-style: italic;
     margin-left: -5px;
     margin-right: 3px;
 }
 
-span.naming::after{
+q::after{
     content: '\201d';
     font-style: italic;
     margin-left: -3px;
