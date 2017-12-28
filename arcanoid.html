@@ -1,0 +1,338 @@
+<!html>
+<head>
+	<style>
+		body{
+		text-align:center;
+		}
+	</style>
+</head>
+<body>
+	<canvas id='canvas' width="640" height='480'></canvas>
+	<script>
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+		
+		setInterval(render,1000/60);
+		
+		var items = [];
+		var score = 0;
+		var maxScore = 0;
+		var level = 1;
+		
+		var bar = {
+			posX:canvas.width*0.5,
+			posY:canvas.height - 40,
+			width:100,
+			height:10,
+			color:'#000',
+			speed:0
+		};
+		var ball = {
+			radius: 10,
+			posX:bar.posX,
+			posY:bar.posY - bar.height/2-10,
+			color: '#f00',
+			mounted:true,
+			vX : 0,
+			vY : 0,
+			speed: 5
+		};		
+		bar.speed = ball.speed*2;
+		var field = {
+			sizeX : 9,
+			sizeY : 9
+		};
+		
+		var timerLeft,timerRight;
+		window.onkeydown = function(e){
+			var key = e.keyCode || e.which;
+			switch(key)
+			{
+				//a,left arrow
+				case 65:
+				case 37:
+					if(timerLeft==null)
+						timerLeft = setInterval(function(){
+							if(bar.posX-bar.width/2>0)
+								bar.posX-=bar.speed;
+							if (bar.posX-bar.width/2<0)
+								bar.posX=bar.width/2;
+						},1000/60);
+					break;
+				//d,right arrow
+				case 68:
+				case 39:
+					if(timerRight==null)
+						timerRight = setInterval(function(){
+							if(bar.posX+bar.width/2<canvas.width)
+							bar.posX+=bar.speed;
+							if (bar.posX+bar.width/2>canvas.width)
+								bar.posX=canvas.width-bar.width/2;
+						},1000/60);		
+					break;
+				//spacebar
+				case 32: 
+					ball.mounted = ball.mounted ? false : true; 
+					if(ball.mounted)
+					{
+						score = 0;
+						bar.posX = canvas.width/2;
+						genItems();
+					}
+					break;
+			}
+		};
+		
+		window.onkeyup = function(e){
+			var key = e.keyCode || e.which;
+			switch(key)
+			{
+				//a,left arrow
+				case 65:
+				case 37:
+					if(timerLeft!=null)
+					{
+						clearInterval(timerLeft);
+						timerLeft = null;
+					}
+					break;
+				//d,right arrow
+				case 68:
+				case 39:
+					if(timerRight!=null)
+					{
+						clearInterval(timerRight);	
+						timerRight = null;
+					}
+					break;
+			}
+		};
+
+		function render(){
+			clear();
+			drawBar();
+			drawField();
+			drawItems();
+			drawBall();
+			drawHUD();
+		}
+		
+		function clear(){
+			ctx.fillStyle = '#fdf9ef';
+			ctx.beginPath();
+			ctx.rect(0, 0, canvas.width, canvas.height);
+			ctx.fill();
+		}
+		
+		function drawField(){
+			ctx.save();
+			ctx.strokeStyle='black';
+			ctx.beginPath();
+			ctx.moveTo(0,canvas.height-100);
+			ctx.lineTo(canvas.width,canvas.height-100);
+			ctx.stroke();
+			ctx.restore();
+			
+			ctx.strokeStyle='#9d9090';
+			for(i=0;i<field.sizeX;i++){
+				for(j=0;j<field.sizeY;j++){
+					ctx.save();
+					ctx.lineWidth = 1;
+					ctx.beginPath();
+					ctx.translate((i+1)*canvas.width/(field.sizeX+2),(j+1)*(canvas.height-100)/(field.sizeY+2));
+					ctx.rect(0,0,canvas.width/(field.sizeX+2),(canvas.height-100)/(field.sizeY+2));
+					ctx.stroke();
+					ctx.restore();
+				}
+			}
+		}
+		
+		function drawBar(){
+			ctx.save();
+			ctx.translate(bar.posX,bar.posY);
+			ctx.beginPath();
+			ctx.fillStyle = bar.color;
+			ctx.fillRect(-bar.width/2,-bar.height/2,bar.width,bar.height);
+			ctx.restore();			
+		}
+		
+		function drawBall(){
+			//movement
+			if(ball.mounted)
+			{
+				ball.posX = bar.posX;
+				ball.posY = bar.posY - bar.height/2-ball.radius;
+				ball.vX = ball.vY = 0;
+			}
+			else
+			{	ball.posX += ball.vX;
+				ball.posY += ball.vY;
+				//collision with bar
+				if(
+					ball.posX + ball.radius >= bar.posX - bar.width/2 && 
+					ball.posX - ball.radius <= bar.posX + bar.width/2 && 
+					ball.posY + ball.radius >= bar.posY - bar.height/2 &&
+					ball.posY - ball.radius <= bar.posY + bar.height/2
+					)
+				{
+					ball.vX = ball.speed*(ball.posX-bar.posX)/(bar.width/2+ball.radius);
+					ball.vY = -Math.pow(Math.pow(ball.speed,2)-Math.pow(ball.vX,2),0.5);
+				}
+				if(ball.posY-ball.radius < 0)
+				{
+					ball.vY = -ball.vY;
+					ball.posY = -(ball.posY-ball.radius)+ball.radius;
+				}
+				if(ball.posX-ball.radius<0)
+				{
+					ball.vX = -ball.vX;
+					ball.posX = -(ball.posX-ball.radius)+ball.radius;
+				}
+				if(ball.posX+ball.radius>canvas.width)
+				{
+					ball.vX = -ball.vX;
+					ball.posX = canvas.width-(ball.posX+ball.radius-canvas.width)-ball.radius;
+				}
+				//collision with items
+				var index = 0
+				while(
+					index<items.length &&
+					!(
+						ball.posX + ball.radius >= items[index].posX && 
+						ball.posX - ball.radius <= items[index].posX + items[index].width && 
+						ball.posY + ball.radius >= items[index].posY &&
+						ball.posY - ball.radius <= items[index].posY + items[index].height
+					)					
+				)
+				{
+					index++;
+				}
+				if(index!=items.length)
+				{
+					if(
+						Math.abs(ball.posY-(items[index].posY+items[index].height/2))/Math.abs(ball.posX-(items[index].posX+items[index].width/2))
+						>=
+						items[index].height/items[index].width
+					)//столкновение с горизонтальными гранями
+					{
+						ball.vY=-ball.vY;
+						var dif=(ball.radius+items[index].height/2)-Math.abs(ball.posY-(items[index].posY+items[index].height/2));
+						ball.posY+=Math.sign(ball.vY)*2*dif;
+					}
+					else
+					{
+						ball.vX=-ball.vX;
+						var dif=(ball.radius+items[index].width/2)-Math.abs(ball.posX-(items[index].posX+items[index].width/2));
+						ball.posX+=Math.sign(ball.vX)*2*dif;
+					}
+					//remove item and calculate score
+					items.splice(index,1);
+					score+=level;
+					if(score>maxScore)
+						maxScore = score;
+					
+					if(items.length==0)
+					{
+						ball.mounted = true;
+						level++;
+						ball.speed+=0.5;
+						bar.speed = 2*ball.speed;
+						genItems();
+					}
+				}
+			}
+			
+			//render
+			ctx.save();
+			ctx.translate(ball.posX,ball.posY);
+			ctx.beginPath();
+			ctx.fillStyle = ball.color;
+			ctx.arc(0,0,ball.radius,0,2*Math.PI);
+			ctx.fill();
+			ctx.restore();			
+		}
+		
+		function drawItems(){
+			for(i=0; i<items.length; i++)
+			{
+				var color = 'rgb('+items[i].color.r+','+items[i].color.g+','+items[i].color.b+')';
+				var shadow = 'rgb('+Math.floor(items[i].color.r*0.7)+','+Math.floor(items[i].color.g*0.7)+','+Math.floor(items[i].color.b*0.85)+')';
+				var highlights = 'rgb('+Math.min(Math.floor(items[i].color.r*1.3),255)+','+Math.min(Math.floor(items[i].color.g*1.3),255)+','+Math.min(Math.floor(items[i].color.b*1.1),255)+')';
+			
+				ctx.save();
+				
+				ctx.fillStyle=color;
+				ctx.translate(items[i].posX,items[i].posY);
+				ctx.beginPath();
+				ctx.rect(0,0,items[i].width,items[i].height);
+				ctx.fill();
+				
+				ctx.lineWidth = 7;
+				ctx.lineCap = 'square';
+				
+				ctx.strokeStyle=shadow;
+				ctx.beginPath();
+				ctx.moveTo(ctx.lineWidth/2,ctx.lineWidth/2);
+				ctx.lineTo(ctx.lineWidth/2,items[i].height-ctx.lineWidth/2);
+				ctx.lineTo(items[i].width-ctx.lineWidth/2,items[i].height-ctx.lineWidth/2);
+				ctx.stroke();
+				
+				ctx.strokeStyle=highlights;
+				ctx.beginPath();
+				ctx.lineTo(ctx.lineWidth/2,ctx.lineWidth/2);
+				ctx.lineTo(items[i].width-ctx.lineWidth/2,ctx.lineWidth/2);
+				ctx.lineTo(items[i].width-ctx.lineWidth/2,items[i].height-ctx.lineWidth/2);
+				ctx.stroke();
+				
+				ctx.restore();
+			}
+		}
+		
+		function drawHUD(){
+			//score
+			ctx.textBaseline = 'top';
+			ctx.textAlign = 'left';
+			var fontsize = ((canvas.height-100.0)/(field.sizeY+2)/2);
+			ctx.font = fontsize.toString() + 'px Segoe UI';
+			ctx.fillStyle = 'blue';
+			ctx.fillText('score: '+score.toString(),20,0);
+			
+			//level
+			ctx.textAlign = 'right';
+			ctx.fillText('level: '+level.toString(),canvas.width-20,0);
+			
+			//maxScore
+			ctx.fillStyle = 'coral';
+			ctx.textAlign = 'center';
+			ctx.fillText('record: '+maxScore.toString(),canvas.width/2,0);			
+		}
+		
+		function genItems(){
+			items = [];
+			for(i=0; i<field.sizeX; i++)
+			{
+				for(j=0;j<field.sizeY;j++)
+				{				
+					if(Math.floor(Math.random()*2)==1)
+					{
+						var tmp = 
+						{
+							width:canvas.width/(field.sizeX+2),
+							height:(canvas.height-100)/(field.sizeY+2),
+							posX:(i+1)*canvas.width/(field.sizeX+2),
+							posY:(j+1)*(canvas.height-100)/(field.sizeY+2),
+							color:{
+								r : Math.floor(Math.random()*200),
+								g : Math.floor(Math.random()*200),
+								b : Math.floor(Math.random()*200)
+							}
+						}
+						items.push(tmp);
+					}
+				}
+			}
+		}
+		
+		genItems();
+	</script>
+</body>
